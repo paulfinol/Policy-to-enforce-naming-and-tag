@@ -1,0 +1,163 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "variables": {
+        "policyName": "Enforce Tags for SQL-DB",
+        "policyDisplayName": "Restrict allowed locations for resources",
+        "policyDescription": "This policy restrict the locations you can specify when deploying resources. Excludes resource groups, Microsoft.AzureActiveDirectory/b2cDirectories, and resources that use the 'global' region."
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policyDefinitions",
+            "name": "[variables('policyName')]",
+            "apiVersion": "2019-09-01",
+            "properties": {
+                "displayName": "[variables('policyDisplayName')]",
+                "policyType": "Custom",
+                "description": "[variables('policyDescription')]",
+                "metadata": {
+                    "category": "General"
+                },
+                "mode": "All",
+                "policyRule": {
+                  "if": {
+                    "allOf": [
+                      {
+                        "field": "type",
+                        "equals": "Microsoft.Sql/servers/databases"
+                      },
+                      {
+                        "anyOf": [
+                          {
+                            "field": "[concat('tags[', parameters('tagName1'),  ']')]",
+                            "exists": "false"
+                          },
+                          {
+                            "field": "[concat('tags[', parameters('tagName2'),  ']')]",
+                            "exists": "false"
+                          },
+                          {
+                            "field": "[concat('tags[', parameters('tagName3'),  ']')]",
+                            "exists": "false"
+                          },
+                          {
+                            "field": "[concat('tags[', parameters('tagName4'),  ']')]",
+                            "exists": "false"
+                          },
+                          {
+                              "field": "[concat('tags[', parameters('tagValue2'),  ']')]",
+                              "notMatch": "####-##-##"
+                          },
+                          {
+                            "field": "[concat('tags[', parameters('tagValue1'),  ']')]",
+                            "exists": "false"
+                          },
+                          {
+                            "field": "[concat('tags[', parameters('tagValue3'),  ']')]",
+                            "notIn": ["Dev","Prod","UAT"]
+                          },
+                          {
+                            "field": "[concat('tags[', parameters('tagValue4'),  ']')]",
+                            "notIn": ["Finance","HR","Supply","Sales"]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "then": {
+                    "effect": "deny"
+                  }
+                },
+                "parameters": {
+                  "tagName1": {
+                    "type": "String",
+                    "metadata": {
+                      "displayName": "Tag Name 1",
+                      "description": "Name of Tag 1, such as 'ApplicationName'"
+                    },
+                    "allowedValues": [
+                      "ApplicationName"
+                    ],
+                    "defaultValue": "ApplicationName"
+                  },
+                  "tagValue1": {
+                    "type": "String",
+                    "metadata": {
+                      "displayName": "Tag Value 1",
+                      "description": "Value of the Tag 1, such as 'App'"
+                    },
+                    "defaultValue": "App"
+                  },
+                  "tagName2": {
+                    "type": "String",
+                    "metadata": {
+                      "displayName": "Tag Name 2",
+                      "description": "Name of Tag 2, such as 'StartDate'"
+                    },
+                    "allowedValues": [
+                      "StartDate"
+                    ],
+                    "defaultValue": "StartDate"
+                  },
+                  "tagValue2": {
+                    "type": "String",
+                    "metadata": {
+                      "displayName": "Tag Value 2",
+                      "description": "Value of the Tag 2, such as '2022-01-01'"
+                    },
+                    "defaultValue": "2022-01-01"
+                  },
+                  "tagName3": {
+                    "type": "String",
+                    "metadata": {
+                      "displayName": "Tag Name 3",
+                      "description": "Name of Tag 3, such as 'Environment'"
+                    },
+                    "allowedValues": [
+                      "Environment"
+                    ],
+                    "defaultValue": "Environment"
+                  },
+                  "tagValue3": {
+                    "type": "String",
+                    "metadata": {
+                      "displayName": "Tag Value 3",
+                      "description": "Value of the Tag 3, such as 'Dev'"
+                    },
+                    "allowedValues": [
+                      "Dev",
+                      "Prod",
+                      "UAT"
+                    ],
+                    "defaultValue": "Dev"
+                  },
+                  "tagName4": {
+                    "type": "String",
+                    "metadata": {
+                      "displayName": "Tag Name 4",
+                      "description": "Name of Tag 4, such as 'BusinessUnit'"
+                    },
+                    "allowedValues": [
+                      "BusinessUnit"
+                    ],
+                    "defaultValue": "BusinessUnit"
+                  },
+                  "tagValue4": {
+                    "type": "String",
+                    "metadata": {
+                      "displayName": "Tag Value 4",
+                      "description": "Value of the Tag 4, such as 'finance'"
+                    },
+                    "allowedValues": [
+                      "Finance",
+                      "HR",
+                      "Supply",
+                      "Sales"
+                    ],
+                    "defaultValue": "Finance"
+                  }
+                }
+            }
+        }
+    ]
+}

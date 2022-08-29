@@ -1,0 +1,81 @@
+{
+  "mode": "All",
+  "policyRule": {
+    "if": {
+      "anyOf": [
+        {
+          "allOf": [
+            {
+              "field": "type",
+              "in": "[parameters('listofResource')]"
+            },
+            {
+              "not": {
+                "field": "[concat('tags[', parameters('tagValue'), ']')]",
+                "match": "####-##-##"
+              }
+            },
+            {
+              "field": "[concat('tags[', parameters('tagName'), ']')]",
+              "equals": "StartDate"
+            }
+          ]
+        },
+
+        {
+          "allOf": [
+            {
+              "field": "type",
+              "in": "[parameters('listofResource')]"
+            },
+            {
+              "not": {
+                "field": "[concat('tags[', parameters('tagName'), ']')]",
+                "equals": "Environment"
+              }
+            }
+          ]
+        }
+
+
+
+			]
+    },
+    "then": {
+      "effect": "deny"
+    }
+  },
+  "parameters": {
+    "tagName": {
+      "type": "String",
+      "metadata": {
+        "displayName": "Tag Name",
+        "description": "Name of the tag, such as 'environment'"
+      }
+    },
+    "listofResource": {
+      "type": "Array",
+      "metadata": {
+        "displayName": "Resources",
+        "description": "Resources to which enforce this rule'"
+      },
+      "allowedValues": [
+        "Microsoft.Sql/servers/databases",
+        "Microsoft.Synapse/workspaces",
+        "Microsoft.Databricks/workspaces",
+        "Microsoft.DataFactory/factories",
+        "Microsoft.Network/dnsZones",
+        "missingRes"
+      ],
+      "defaultValue": [ "missingRes"]
+    },
+    "tagValue": {
+      "type": "String",
+      "metadata": {
+        "displayName": "Tag Name",
+        "description": "Name of the tag, such as 'environment'"
+      },
+      "defaultValue": "2022-01-01"
+    }
+  }
+}
