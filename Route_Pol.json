@@ -5,7 +5,7 @@
       "allOf": [
         {
           "field": "type",
-          "equals": "Microsoft.Sql/servers"
+          "equals": "Microsoft.Network/virtualNetworks"
         },
         {
           "anyOf": [
@@ -31,24 +31,19 @@
             },
             {
               "field": "[concat('tags[', parameters('tagName2'),  ']')]",
-              "notMatch": "####-##-##"
+              "equals": ""
             },
             {
               "field": "[concat('tags[', parameters('tagName3'),  ']')]",
               "notIn": [
-                "Dev",
-                "Prod",
-                "UAT"
+                "High",
+                "Medium",
+                "Low"
               ]
             },
             {
               "field": "[concat('tags[', parameters('tagName4'),  ']')]",
-              "notIn": [
-                "Finance",
-                "HR",
-                "Supply",
-                "Sales"
-              ]
+              "notMatch": "#####"
             }
           ]
         }
@@ -73,35 +68,35 @@
     "tagName2": {
       "type": "String",
       "metadata": {
-        "displayName": "StartDate Tag",
-        "description": "Name of tag 2, such as 'StartDate'"
+        "displayName": "OwnerName Tag",
+        "description": "Name of tag 2, such as 'OwnerName'"
       },
       "allowedValues": [
-        "StartDate"
+        "OwnerName"
       ],
-      "defaultValue": "StartDate"
+      "defaultValue": "OwnerName"
     },
     "tagName3": {
       "type": "String",
       "metadata": {
-        "displayName": "Environment Tag",
-        "description": "Name of tag 3, such as 'Environment'"
+        "displayName": "BusinessCriticality Tag",
+        "description": "Name of tag 3, such as 'BusinessCriticality'"
       },
       "allowedValues": [
-        "Environment"
+        "BusinessCriticality"
       ],
-      "defaultValue": "Environment"
+      "defaultValue": "BusinessCriticality"
     },
     "tagName4": {
       "type": "String",
       "metadata": {
-        "displayName": "BusinessUnit Tag",
-        "description": "Name of tag 4, such as 'BusinessUnit'"
+        "displayName": "CostCenter Tag",
+        "description": "Name of tag 4, such as 'CostCenter'"
       },
       "allowedValues": [
-        "BusinessUnit"
+        "CostCenter"
       ],
-      "defaultValue": "BusinessUnit"
+      "defaultValue": "CostCenter"
     }
   }
 }

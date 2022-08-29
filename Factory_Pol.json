@@ -5,7 +5,7 @@
       "allOf": [
         {
           "field": "type",
-          "equals": "Microsoft.Sql/servers"
+          "equals": "Microsoft.DataFactory/factories"
         },
         {
           "anyOf": [
@@ -44,10 +44,8 @@
             {
               "field": "[concat('tags[', parameters('tagName4'),  ']')]",
               "notIn": [
-                "Finance",
-                "HR",
-                "Supply",
-                "Sales"
+                "Confidential",
+                "Public"
               ]
             }
           ]
@@ -62,24 +60,24 @@
     "tagName": {
       "type": "String",
       "metadata": {
-        "displayName": "ApplicationName Tag",
-        "description": "Name of tag 1, such as 'ApplicationName'"
+        "displayName": "ProjectName Tag",
+        "description": "Name of tag 1, such as 'ProjectName'"
       },
       "allowedValues": [
-        "ApplicationName"
+        "ProjectName"
       ],
-      "defaultValue": "ApplicationName"
+      "defaultValue": "ProjectName"
     },
     "tagName2": {
       "type": "String",
       "metadata": {
-        "displayName": "StartDate Tag",
-        "description": "Name of tag 2, such as 'StartDate'"
+        "displayName": "EndDate Tag",
+        "description": "Name of tag 2, such as 'EndDate'"
       },
       "allowedValues": [
-        "StartDate"
+        "EndDate"
       ],
-      "defaultValue": "StartDate"
+      "defaultValue": "EndDate"
     },
     "tagName3": {
       "type": "String",
@@ -95,13 +93,13 @@
     "tagName4": {
       "type": "String",
       "metadata": {
-        "displayName": "BusinessUnit Tag",
-        "description": "Name of tag 4, such as 'BusinessUnit'"
+        "displayName": "DataClassification Tag",
+        "description": "Name of tag 4, such as 'DataClassification'"
       },
       "allowedValues": [
-        "BusinessUnit"
+        "DataClassification"
       ],
-      "defaultValue": "BusinessUnit"
+      "defaultValue": "DataClassification"
     }
   }
 }

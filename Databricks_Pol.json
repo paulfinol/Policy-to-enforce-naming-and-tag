@@ -5,7 +5,7 @@
       "allOf": [
         {
           "field": "type",
-          "equals": "Microsoft.Sql/servers"
+          "equals": "Microsoft.Databricks/workspaces"
         },
         {
           "anyOf": [
@@ -44,10 +44,9 @@
             {
               "field": "[concat('tags[', parameters('tagName4'),  ']')]",
               "notIn": [
-                "Finance",
-                "HR",
-                "Supply",
-                "Sales"
+                "Low",
+                "Medium",
+                "High"
               ]
             }
           ]
@@ -95,13 +94,13 @@
     "tagName4": {
       "type": "String",
       "metadata": {
-        "displayName": "BusinessUnit Tag",
-        "description": "Name of tag 4, such as 'BusinessUnit'"
+        "displayName": "BusinessCriticality Tag",
+        "description": "Name of tag 4, such as 'BusinessCriticality'"
       },
       "allowedValues": [
-        "BusinessUnit"
+        "BusinessCriticality"
       ],
-      "defaultValue": "BusinessUnit"
+      "defaultValue": "BusinessCriticality"
     }
   }
 }

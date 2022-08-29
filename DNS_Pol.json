@@ -5,7 +5,7 @@
       "allOf": [
         {
           "field": "type",
-          "equals": "Microsoft.Sql/servers"
+          "equals": "Microsoft.Synapse/workspaces"
         },
         {
           "anyOf": [
@@ -43,12 +43,7 @@
             },
             {
               "field": "[concat('tags[', parameters('tagName4'),  ']')]",
-              "notIn": [
-                "Finance",
-                "HR",
-                "Supply",
-                "Sales"
-              ]
+              "notMatch": "#####"
             }
           ]
         }
@@ -95,13 +90,13 @@
     "tagName4": {
       "type": "String",
       "metadata": {
-        "displayName": "BusinessUnit Tag",
-        "description": "Name of tag 4, such as 'BusinessUnit'"
+        "displayName": "CostCenter Tag",
+        "description": "Name of tag 4, such as 'CostCenter'"
       },
       "allowedValues": [
-        "BusinessUnit"
+        "CostCenter"
       ],
-      "defaultValue": "BusinessUnit"
+      "defaultValue": "CostCenter"
     }
   }
 }

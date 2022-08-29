@@ -5,7 +5,7 @@
       "allOf": [
         {
           "field": "type",
-          "equals": "Microsoft.Sql/servers"
+          "equals": "Microsoft.Network/virtualNetworks"
         },
         {
           "anyOf": [
@@ -31,24 +31,18 @@
             },
             {
               "field": "[concat('tags[', parameters('tagName2'),  ']')]",
-              "notMatch": "####-##-##"
+              "notIn": [
+                "Confidential",
+                "Public"
+              ]
             },
             {
               "field": "[concat('tags[', parameters('tagName3'),  ']')]",
-              "notIn": [
-                "Dev",
-                "Prod",
-                "UAT"
-              ]
+              "equals": ""
             },
             {
               "field": "[concat('tags[', parameters('tagName4'),  ']')]",
-              "notIn": [
-                "Finance",
-                "HR",
-                "Supply",
-                "Sales"
-              ]
+              "notMatch": "#####"
             }
           ]
         }
@@ -73,35 +67,35 @@
     "tagName2": {
       "type": "String",
       "metadata": {
-        "displayName": "StartDate Tag",
-        "description": "Name of tag 2, such as 'StartDate'"
+        "displayName": "DataClassification Tag",
+        "description": "Name of tag 2, such as 'DataClassification'"
       },
       "allowedValues": [
-        "StartDate"
+        "DataClassification"
       ],
-      "defaultValue": "StartDate"
+      "defaultValue": "DataClassification"
     },
     "tagName3": {
       "type": "String",
       "metadata": {
-        "displayName": "Environment Tag",
-        "description": "Name of tag 3, such as 'Environment'"
+        "displayName": "ApproverName Tag",
+        "description": "Name of tag 3, such as 'ApproverName'"
       },
       "allowedValues": [
-        "Environment"
+        "ApproverName"
       ],
-      "defaultValue": "Environment"
+      "defaultValue": "ApproverName"
     },
     "tagName4": {
       "type": "String",
       "metadata": {
-        "displayName": "BusinessUnit Tag",
-        "description": "Name of tag 4, such as 'BusinessUnit'"
+        "displayName": "CostCenter Tag",
+        "description": "Name of tag 4, such as 'CostCenter'"
       },
       "allowedValues": [
-        "BusinessUnit"
+        "CostCenter"
       ],
-      "defaultValue": "BusinessUnit"
+      "defaultValue": "CostCenter"
     }
   }
 }
