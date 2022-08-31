@@ -1,0 +1,61 @@
+{
+  "mode": "All",
+  "policyRule": {
+    "if": {
+      "allOf": [
+        {
+          "field": "type",
+          "equals": "[parameters('resourceType')]"
+        },
+        {
+          "field": "name",
+          "notLike": "[parameters('resourceName')]"
+        }
+      ]
+    },
+    "then": {
+      "effect": "[parameters('effect')]"
+    }
+  },
+  "parameters": {
+    "resourceName": {
+      "type": "String",
+      "metadata": {
+        "displayName": "Resource Name",
+        "description": "Name of the resource"
+      },
+      "allowedValues": [
+        "sqldb-*",
+        "syn-*",
+        "adb-*",
+        "cls-*",
+        "adf-*",
+        "vnet-*",
+        "snet-*",
+        "cn-*",
+        "route-*",
+      ],
+    },
+    "resourceType": {
+      "type": "String",
+      "metadata": {
+        "displayName": "Resource type",
+        "description": "Resource type to enforce naming pattern.",
+        "strongType": "resourceTypes"
+      }
+    },
+
+    "effect": {
+      "type": "String",
+      "defaultValue": "Deny",
+      "metadata": {
+        "description": "The effect determines what happens when the policy rule is evaluated to match"
+      },
+      "allowedValues": [
+        "Deny",
+        "Audit",
+        "Disabled"
+      ]
+    }
+  }
+}
