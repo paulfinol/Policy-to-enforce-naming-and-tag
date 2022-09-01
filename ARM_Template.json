@@ -4,7 +4,7 @@
     "variables": {
         "policyName": "Enforce Tags",
         "policyDisplayName": "Enforce Tag name and values for selected resources",
-        "policyDescription": "According to tagging and name agreement"
+        "policyDescription": "According to tagging agreement"
     },
     "resources": [
         {

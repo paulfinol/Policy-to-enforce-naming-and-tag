@@ -6,6 +6,7 @@
         {
           "anyOf": [
             {
+              /*       Checks that TAGs enforced by admin, are declared by user      */
               "anyOf": [
                 {
                   "field": "[concat('tags[', parameters('tagName'),  ']')]",
@@ -25,6 +26,7 @@
                 }
               ]
             },
+                    /*        each condition checks tag value format, for names only checks that is not empty       */
             {
               "allOf": [
                 {
@@ -188,6 +190,7 @@
             }
           ]
         },
+        /*        Checks Resource type that was input during assignment       */
         {
           "field": "type",
           "equals": "[parameters('resourceType')]"
@@ -198,6 +201,7 @@
       "effect": "deny"
     }
   },
+    /*       strongType resourceTypes allow to select from all resourceType directly from resource manager       */
   "parameters": {
     "resourceType": {
       "type": "String",
@@ -207,12 +211,14 @@
         "strongType": "resourceTypes"
       }
     },
+    /*       During assignment admin is able to select 4 TAGs that will be enforced the rest are optional       */
     "tagName": {
       "type": "String",
       "metadata": {
         "displayName": "Tag 1 to enforce",
         "description": "Name of tag 1"
       },
+          /*       all possible TAGs key are available       */
       "allowedValues": [
         "ApplicationName",
         "ProjectName",

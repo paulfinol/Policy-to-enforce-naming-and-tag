@@ -1,0 +1,319 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "variables": {
+        "policyName": "Enforce Tags",
+        "policyDisplayName": "Enforce Tag name and values for selected resources",
+        "policyDescription": "According to tagging agreement"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policyDefinitions",
+            "name": "[variables('policyName')]",
+            "apiVersion": "2019-09-01",
+            "properties": {
+                "displayName": "[variables('policyDisplayName')]",
+                "policyType": "Custom",
+                "description": "[variables('policyDescription')]",
+                "metadata": {
+                    "category": "General"
+                },
+                "mode": "All",
+                "policyRule": {
+                  "if": {
+                    "allOf": [
+                      {
+                        "anyOf": [
+                          {
+                            /*       Checks that TAGs enforced by admin, are declared by user      */
+                            "anyOf": [
+                              {
+                                "field": "[[concat('tags[', parameters('tagName'),  ']')]",
+                                "exists": "false"
+                              },
+                              {
+                                "field": "[[concat('tags[', parameters('tagName2'),  ']')]",
+                                "exists": "false"
+                              },
+                              {
+                                "field": "[[concat('tags[', parameters('tagName3'),  ']')]",
+                                "exists": "false"
+                              },
+                              {
+                                "field": "[[concat('tags[', parameters('tagName4'),  ']')]",
+                                "exists": "false"
+                              }
+                            ]
+                          },
+                                  /*        each condition checks tag value format, for names only checks that is not empty       */
+                          {
+                            "allOf": [
+                              {
+                                "field": "tags['ApplicationName']",
+                                "exists": "true"
+                              },
+                              {
+                                "field": "tags['ApplicationName']",
+                                "equals": ""
+                              }
+                            ]
+                          },
+                          {
+                            "allOf": [
+                              {
+                                "field": "tags['ProjectName']",
+                                "exists": "true"
+                              },
+                              {
+                                "field": "tags['ProjectName']",
+                                "equals": ""
+                              }
+                            ]
+                          },
+                          {
+                            "allOf": [
+                              {
+                                "field": "tags['Environment']",
+                                "exists": "true"
+                              },
+                              {
+                                "field": "tags['Environment']",
+                                "notIn": [
+                                  "Dev",
+                                  "Prod",
+                                  "UAT",
+                                  "Pre-Prod",
+                                  "Test"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "allOf": [
+                              {
+                                "field": "tags['OwnerName']",
+                                "exists": "true"
+                              },
+                              {
+                                "field": "tags['OwnerName']",
+                                "notLike": "*@company.com"
+                              }
+                            ]
+                          },
+                          {
+                            "allOf": [
+                              {
+                                "field": "tags['CostCenter']",
+                                "exists": "true"
+                              },
+                              {
+                                "allOf": [
+                                  {
+                                    "field": "tags['CostCenter']",
+                                    "notMatch": "#####"
+                                  },
+                                  {
+                                    "field": "tags['CostCenter']",
+                                    "notMatch": "######"
+                                  },
+                                  {
+                                    "field": "tags['CostCenter']",
+                                    "notMatch": "#######"
+                                  },
+                                  {
+                                    "field": "tags['CostCenter']",
+                                    "notMatch": "########"
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "allOf": [
+                              {
+                                "field": "tags['EndDate']",
+                                "exists": "true"
+                              },
+                              {
+                                "field": "tags['EndDate']",
+                                "notMatch": "####-##-##"
+                              }
+                            ]
+                          },
+                          {
+                            "allOf": [
+                              {
+                                "field": "tags['StartDate']",
+                                "exists": "true"
+                              },
+                              {
+                                "field": "tags['StartDate']",
+                                "notMatch": "####-##-##"
+                              }
+                            ]
+                          },
+                          {
+                            "allOf": [
+                              {
+                                "field": "tags['DataClassification']",
+                                "exists": "true"
+                              },
+                              {
+                                "field": "tags['DataClassification']",
+                                "notIn": [
+                                  "Confidential",
+                                  "Public"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "allOf": [
+                              {
+                                "field": "tags['ApproverName']",
+                                "exists": "true"
+                              },
+                              {
+                                "field": "tags['ApproverName']",
+                                "notLike": "*@company.com"
+                              }
+                            ]
+                          },
+                          {
+                            "allOf": [
+                              {
+                                "field": "tags['BusinessUnit']",
+                                "exists": "true"
+                              },
+                              {
+                                "field": "tags['BusinessUnit']",
+                                "equals": ""
+                              }
+                            ]
+                          },
+                          {
+                            "allOf": [
+                              {
+                                "field": "tags['BusinessCriticality']",
+                                "exists": "true"
+                              },
+                              {
+                                "field": "tags['BusinessCriticality']",
+                                "notIn": [
+                                  "High",
+                                  "Medium",
+                                  "Low"
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      /*        Checks Resource type that was input during assignment       */
+                      {
+                        "field": "type",
+                        "equals": "[[parameters('resourceType')]"
+                      }
+                    ]
+                  },
+                  "then": {
+                    "effect": "deny"
+                  }
+                },
+                  /*       strongType resourceTypes allow to select from all resourceType directly from resource manager       */
+                "parameters": {
+                  "resourceType": {
+                    "type": "String",
+                    "metadata": {
+                      "displayName": "Resource type",
+                      "description": "Resource type to enforce naming pattern.",
+                      "strongType": "resourceTypes"
+                    }
+                  },
+                  /*       During assignment admin is able to select 4 TAGs that will be enforced the rest are optional       */
+                  "tagName": {
+                    "type": "String",
+                    "metadata": {
+                      "displayName": "Tag 1 to enforce",
+                      "description": "Name of tag 1"
+                    },
+                        /*       all possible TAGs key are available       */
+                    "allowedValues": [
+                      "ApplicationName",
+                      "ProjectName",
+                      "Environment",
+                      "OwnerName",
+                      "CostCenter",
+                      "EndDate",
+                      "StartDate",
+                      "DataClassification",
+                      "ApproverName",
+                      "BusinessCriticality",
+                      "BusinessUnit"
+                    ]
+                  },
+                  "tagName2": {
+                    "type": "String",
+                    "metadata": {
+                      "displayName": "Tag 2 to enforce",
+                      "description": "Name of tag 2"
+                    },
+                    "allowedValues": [
+                      "ApplicationName",
+                      "ProjectName",
+                      "Environment",
+                      "OwnerName",
+                      "CostCenter",
+                      "EndDate",
+                      "StartDate",
+                      "DataClassification",
+                      "ApproverName",
+                      "BusinessCriticality",
+                      "BusinessUnit"
+                    ]
+                  },
+                  "tagName3": {
+                    "type": "String",
+                    "metadata": {
+                      "displayName": "Tag 3 to enforce",
+                      "description": "Name of tag 3"
+                    },
+                    "allowedValues": [
+                      "ApplicationName",
+                      "ProjectName",
+                      "Environment",
+                      "OwnerName",
+                      "CostCenter",
+                      "EndDate",
+                      "StartDate",
+                      "DataClassification",
+                      "ApproverName",
+                      "BusinessCriticality",
+                      "BusinessUnit"
+                    ]
+                  },
+                  "tagName4": {
+                    "type": "String",
+                    "metadata": {
+                      "displayName": "Tag 4 to enforce",
+                      "description": "Name of tag 4"
+                    },
+                    "allowedValues": [
+                      "ApplicationName",
+                      "ProjectName",
+                      "Environment",
+                      "OwnerName",
+                      "CostCenter",
+                      "EndDate",
+                      "StartDate",
+                      "DataClassification",
+                      "ApproverName",
+                      "BusinessCriticality",
+                      "BusinessUnit"
+                    ]
+                  }
+                }
+            }
+        }
+    ]
+}

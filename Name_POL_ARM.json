@@ -1,0 +1,83 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "variables": {
+        "policyName": "Enforce Names",
+        "policyDisplayName": "Enforce name pattern for resources",
+        "policyDescription": "According to tagging agreement"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policyDefinitions",
+            "name": "[variables('policyName')]",
+            "apiVersion": "2019-09-01",
+            "properties": {
+                "displayName": "[variables('policyDisplayName')]",
+                "policyType": "Custom",
+                "description": "[variables('policyDescription')]",
+                "metadata": {
+                    "category": "General"
+                },
+                "mode": "All",
+                "policyRule": {
+                  "if": {
+                    "allOf": [
+                      {
+                        "field": "type",
+                        "equals": "[[parameters('resourceType')]"
+                      },
+                      {
+                        "field": "name",
+                        "notLike": "[[parameters('resourceName')]"
+                      }
+                    ]
+                  },
+                  "then": {
+                    "effect": "[[parameters('effect')]"
+                  }
+                },
+                "parameters": {
+                  "resourceName": {
+                    "type": "String",
+                    "metadata": {
+                      "displayName": "Resource Name",
+                      "description": "Name of the resource"
+                    },
+                    "allowedValues": [
+                      "sqldb-*",
+                      "syn-*",
+                      "adb-*",
+                      "cls-*",
+                      "adf-*",
+                      "vnet-*",
+                      "snet-*",
+                      "cn-*",
+                      "route-*"
+                    ]
+                  },
+                  "resourceType": {
+                    "type": "String",
+                    "metadata": {
+                      "displayName": "Resource type",
+                      "description": "Resource type to enforce naming pattern.",
+                      "strongType": "resourceTypes"
+                    }
+                  },
+
+                  "effect": {
+                    "type": "String",
+                    "defaultValue": "Deny",
+                    "metadata": {
+                      "description": "The effect determines what happens when the policy rule is evaluated to match"
+                    },
+                    "allowedValues": [
+                      "Deny",
+                      "Audit",
+                      "Disabled"
+                    ]
+                  }
+              }
+			     }
+        }
+    ]
+}
