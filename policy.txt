@@ -1,4 +1,0 @@
-Azure policies: they can be assigned at the management group level, subscription level and individual resource groups
-existing but non-compliant resources, you might want to put that resources (resource groups to be more precise) into excluded scopes in the policy assignments
-different naming policies for different teams and limit their assignment to their specific subscriptions or resource groups
-resourceTypes, to validate inputs against existing resource types in your subscription
